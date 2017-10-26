@@ -1,18 +1,17 @@
-from os import environ
-from pathlib import Path
+import os
 from setuptools import setup
 from shutil import copyfile
 
 
 try:
-    config_dir = Path(environ['$XDG_CONFIG_HOME']) / 'sesamo'
+    config_dir = os.path.expandvars('$XDG_CONFIG_HOME/sesamo')
 except KeyError:
-    config_dir = Path.home() / '.config' / 'sesamo'
+    config_dir = os.path.expanduser('~/.config/sesamo')
 
-config_dir.mkdir(exist_ok=True)
-current_dir = Path(__file__).parent
-copyfile(current_dir / 'config.ini.example',
-         config_dir / 'config.ini')
+os.makedirs(config_dir, exist_ok=True)
+current_dir = os.path.dirname(__file__)
+copyfile(os.path.join(current_dir, 'config.ini.example'),
+         os.path.join(config_dir, 'config.ini'))
 
 setup(
     name='sesamo',
